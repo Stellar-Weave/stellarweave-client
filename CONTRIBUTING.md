@@ -36,10 +36,7 @@ And if you like the project, but just don't have time to contribute, that's fine
   - [Key Conventions](#key-conventions)
     - [File Naming](#file-naming)
     - [Order of Includes](#order-of-includes)
-    - [Type Names](#type-names)
-    - [Variable Names](#variable-names)
-    - [Constant Names](#constant-names)
-    - [Function Names](#function-names)
+    - [Naming Conventions](#naming-conventions)
     - [Comments](#comments)
     - [Formatting](#formatting)
 - [Commit Guidelines](#commit-guidelines)
@@ -214,45 +211,86 @@ We use C++20 and follow the **[Google C++ Style Guide](https://google.github.io/
 ### Key Conventions
 
 #### File Naming
-- C++ source files should end with `.cc`
-- Header files should end with `.h`
-- File names should be all lowercase, with underscores (`_`) as separators.  
-  Example: `my_useful_class.cc`
+
+- **C++ source files** should end with `.cc`  
+- **Header files** should end with `.h`  
+- **File names** should be all lowercase, with underscores (`_`) as separators  
+- **Example**: `my_useful_class.cc`
 
 #### Order of Includes
-- Related header, C system headers, C++ standard library headers, other libraries' headers, your project's headers.
 
-#### Type Names
-- Type names (classes, structs, enums, typedefs) use `UpperCamelCase` with no underscores.  
-  Example: `MyUsefulClass`
+Includes should be ordered as follows (each group separated by a blank line):
 
-#### Variable Names
-- Variables are typically all lowercase with underscores between words.  
-  Example: `my_variable`
-- Class member variables have a trailing underscore.  
-  Example: `my_member_variable_`
-- Global variables are generally discouraged, but if needed, prefix with `g_`  
-  Example: `g_global_setting`
+1. **Related header**: The primary header associated with the current source file (e.g., `foo.h` for `foo.cc`)
+2. **C system headers**: (e.g., `<unistd.h>`)
+3. **C++ standard library headers**: (e.g., `<vector>`, `<string>`)
+4. **Other libraries' headers**: (e.g., `<boost/foo.hpp>`, `<gtest/gtest.h>`)
+5. **Your project's headers**: (e.g., `"my_project/my_header.h"`)
 
-#### Constant Names
-- Constants declared `constexpr` or `const` and fixed for the program's duration start with a `k` followed by `MixedCase`  
-  Example: `kMyConstant`
+All includes within a group should be **sorted alphabetically**.
 
-#### Function Names
-- Regular functions use `UpperCamelCase`  
-  Example: `MyFunction`
+#### Naming Conventions
+
+- **Type Names** (classes, structs, enums, typedefs, type aliases): Use `UpperCamelCase` with no underscores.  
+  - *Example*: `MyUsefulClass`, `HttpRequest`, `ColorMap`
+
+- **Variable Names**: Use `snake_case`.  
+  - *Example*: `my_variable`, `total_count`  
+  - **Class member variables** should have a trailing underscore (`_`).  
+    - *Example*: `my_member_variable_`, `connection_data_`  
+  - **Global variables** are generally discouraged. If absolutely necessary, use `snake_case` with no special prefix.
+
+- **Constant Names**: Declared `constexpr` or `const` and fixed for the program's duration. Start with `k` followed by `UpperCamelCase`.  
+  - *Example*: `kMyConstant`, `kMaxRetries`, `kDefaultBufferSize`
+
+- **Function Names**: Use `UpperCamelCase` for regular (member and free) functions.  
+  - *Example*: `MyFunction()`, `ProcessData()`, `CalculateSum()`
 
 #### Comments
+
 - Use `//` for most comments.
-- Use `/* ... */` for file-level comments or temporarily commenting out blocks.
-- Header files for classes should include a comment describing the class purpose.
-- Public functions should have comments describing their purpose, parameters, and return values.
+- Use `/* ... */` for:
+  - Deprecated code
+  - Temporarily commenting out blocks
+  - Documentation (e.g., Doxygen)
+- **Header files** should include a comment describing the purpose of the class/struct/enum declared within.
+- **Public functions** should have comments describing their purpose, parameters, and return values (typically above the function declaration in the header).
 
 #### Formatting
-- Limit lines to 80 characters.
-- Use spaces for indentation (2 spaces per level). Do **not** use tabs.
-- For functions and class definitions, place opening braces `{` on their own line.
-- For control structures (e.g., `if`, `while`), place the opening brace `{` on the same line.
+
+- **Line Length**: Keep lines ≤ 80 characters when possible.
+- **Indentation**: Use **2 spaces** per level. **No tabs**.
+- **Brace Placement**:
+  - **Functions and Class/Struct/Enum/Union Definitions**:  
+    ```cpp
+    class MyClass {
+      // ...
+    };
+
+    void MyFunction() {
+      // ...
+    }
+    ```
+  - **Control Structures** (`if`, `while`, `for`, `switch`):  
+    ```cpp
+    if (condition) {
+      // ...
+    } else {
+      // ...
+    }
+    ```
+
+- **Pointer and Reference Alignment**: Asterisk `*` or ampersand `&` aligns with the type.  
+  - *Example*: `int* ptr;`, `const std::string& ref;`
+
+- **Empty Lines**: Use to separate logical code blocks. Avoid **more than one** consecutive empty line.
+
+- **Spaces**: Avoid extraneous spaces.  
+  - *Examples*:
+    - `foo(0)` – no space inside parentheses  
+    - `vector<string>` – no space inside angle brackets  
+    - `a = b` – space around assignment operators  
+    - `if (condition)` – space before control statement parentheses
 
 We use [`clang-format`](https://clang.llvm.org/docs/ClangFormat.html) to enforce the style. A `.clang-format` configuration will be provided in the repository. Please run it before submitting a pull request.
 

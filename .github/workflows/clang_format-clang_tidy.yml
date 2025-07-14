@@ -1,0 +1,87 @@
+# .github/workflows/clang-tidy-and-format.yml
+
+name: Clang Format & Clang Tidy Check
+
+on:
+  push:
+    branches:
+      - "main"
+      - "develop" # Include develop branch if you use it for active development
+    paths:
+      - 'src/**/*.cc'
+      - 'src/**/*.h'
+      - 'include/**/*.h'
+  pull_request:
+    branches:
+      - "main"
+      - "develop" # Include develop branch
+    paths:
+      - 'src/**/*.cc'
+      - 'src/**/*.h'
+      - 'include/**/*.h'
+  workflow_dispatch:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Required for git diff later to check formatting
+
+      - name: Setup C++ Build Environment
+        # This action installs Clang, clang-format, clang-tidy, cmake, ninja, etc.
+        # It's more robust than manual apt-get installs for C++ toolchains.
+        uses: "aminya/setup-cpp@v2"
+        with:
+          compiler: clang
+          clang-version: "18" # Or "latest", or a specific version to match your local setup
+          cmake: true
+          ninja: true # Recommended build system for speed with CMake
+
+      # --- Clang-Format Check ---
+      - name: Check Clang-Format
+        run: |
+          echo "Running clang-format --dry-run --Werror..."
+          # Find all relevant C++ files and run clang-format in dry-run mode.
+          # --Werror will cause it to exit with an error if any changes are detected.
+          find . -regex '.*\.\(cc\|h\)' -exec clang-format -style=file --dry-run --Werror {} +
+        shell: bash
+
+      # --- Clang-Tidy Setup and Check ---
+      - name: Create Build Directory
+        run: mkdir build
+
+      - name: Configure CMake for Compilation Database
+        # Run CMake from the 'build' directory, pointing to the project root
+        run: |
+          cd build
+          cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_CXX_STANDARD=20 ..
+        shell: bash
+
+      - name: Build Project (for full compilation database population)
+        # This step ensures compile_commands.json is fully populated with all
+        # compilation units, which is necessary for clang-tidy to analyze all files.
+        run: |
+          cd build
+          cmake --build .
+        shell: bash
+
+      - name: Run Clang-Tidy
+        # Clang-Tidy will automatically pick up the .clang-tidy file from the project root
+        # and compile_commands.json from the 'build' directory (-p .).
+        # We run it without --fix here; in CI, we typically just report errors.
+        run: |
+          cd build # Run from the build directory so -p . works correctly
+          clang-tidy -p . > clang-tidy-report.txt
+        shell: bash
+
+      # Optional: Add a step to upload clang-tidy reports if it fails
+      - name: Upload Clang-Tidy Report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: clang-tidy-report
+          path: build/clang-tidy-report.txt # (You'd need to redirect output to this file in the 'Run Clang-Tidy' step)

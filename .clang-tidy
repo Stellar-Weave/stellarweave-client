@@ -1,0 +1,47 @@
+# stellarweave-client/.clang-tidy
+Checks: >
+  -*, # Disable all default checks first
+
+  # --- Naming Conventions ---
+  readability-identifier-naming,
+
+  # --- Order of Includes ---
+  # Enforces Google's include order, which aligns with the "Related header first" rule.
+  google-include-order,
+
+  # --- General Good Practices (Highly Recommended) ---
+  bugprone-*,
+  performance-*,
+  modernize-*,
+  portability-*,
+  clang-analyzer-*,
+  cert-*,
+  cppcoreguidelines-*,
+
+# --- Check Options ---
+ChecksOptions:
+  # Naming Convention Options for readability-identifier-naming
+  readability-identifier-naming.ClassCase: CamelCase
+  readability-identifier-naming.StructCase: CamelCase
+  readability-identifier-naming.EnumCase: CamelCase
+  readability-identifier-naming.TypedefCase: CamelCase
+  readability-identifier-naming.TypeAliasCase: CamelCase
+  readability-identifier-naming.VariableCase: snake_case
+  readability-identifier-naming.MemberVariableCase: snake_case
+  readability-identifier-naming.ConstantCase: camelBack # 'k' prefix will be enforced by ConstantPrefix
+  readability-identifier-naming.FunctionCase: CamelCase
+  readability-identifier-naming.MethodCase: CamelCase
+  readability-identifier-naming.LocalVariableCase: snake_case
+  readability-identifier-naming.ParameterCase: snake_case
+  readability-identifier-naming.GlobalVariableCase: snake_case
+
+  readability-identifier-naming.MemberVariableSuffix: '_'
+  readability-identifier-naming.ConstantPrefix: 'k'
+
+# --- Header Filtering ---
+# This regex tells clang-tidy to only report warnings for files within your 'include/' and 'src/' directories.
+# This prevents warnings from system headers or third-party libraries.
+HeaderFilterRegex: '(^include/.*|src/.*)'
+
+# Extra compilation arguments. Ensure this matches your CMake project's C++ standard.
+ExtraArgs: ['-std=c++20']

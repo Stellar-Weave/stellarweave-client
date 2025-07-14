@@ -99,6 +99,7 @@ We will then take care of the issue as soon as possible.
 
 ### Reporting Bugs
 
+> You must never report security related issues, vulnerabilities or bugs including sensitive information to the issue tracker, or elsewhere in public. Check our [Security Policy](https://github.com/Stellar-Weave/stellarweave-client/security/policy) for information.
 
 #### Before Submitting a Bug Report
 
@@ -117,9 +118,6 @@ A good bug report shouldn't leave others needing to chase you up for more inform
 
 
 #### How Do I Submit a Good Bug Report?
-
-> You must never report security related issues, vulnerabilities or bugs including sensitive information to the issue tracker, or elsewhere in public. Instead sensitive bugs must be sent by email to <stellarweave.dev@protonmail.com>.
-
 
 We use GitHub issues to track bugs and errors. If you run into an issue with the project:
 

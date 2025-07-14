@@ -1,2 +1,3 @@
+# stellarweave-client/.clang-format
 BasedOnStyle: Google
 Standard: Cpp20

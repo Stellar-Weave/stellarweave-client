@@ -1,9 +1,9 @@
 [
   {
     "include": [
-      "src/**/*.cc",
-      "src/**/*.h",
-      "include/**/*.h"
+      "src/**/*",
+      "src/**/*",
+      "include/**/*"
     ],
     "exclude": [
     ],

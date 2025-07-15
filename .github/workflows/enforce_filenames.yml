@@ -1,0 +1,89 @@
+name: Enforce C/C++ File Naming Conventions
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  check_c_cpp_file_names:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        # fetch-depth: 0 is crucial to get full history for git diff to detect renames properly
+        fetch-depth: 0
+
+    - name: Get added and renamed files
+      id: changed-files
+      run: |
+        if [[ "${{ github.event_name }}" == "push" ]]; then
+          CHANGED_FILES=$(git diff --diff-filter=AR --name-only ${{ github.event.before }} ${{ github.sha }})
+        elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
+          BASE_REF=${{ github.base_ref }}
+          HEAD_REF=${{ github.head_ref }}
+          CHANGED_FILES=$(git diff --diff-filter=AR --name-only origin/${BASE_REF}...origin/${HEAD_REF})
+        fi
+        echo "Detected changes:"
+        echo "$CHANGED_FILES"
+        echo "changed_files_list<<EOF" >> $GITHUB_OUTPUT
+        echo "$CHANGED_FILES" >> $GITHUB_OUTPUT
+        echo "EOF" >> $GITHUB_OUTPUT
+
+    - name: Check C/C++ file extensions
+      # Only run if there are any added or renamed files
+      if: steps.changed-files.outputs.changed_files_list != ''
+      run: |
+        ALLOWED_EXTENSIONS_REGEX="c|cc|h"
+        DISALLOWED_CPP_EXTENSIONS_REGEX="cpp|cxx|hpp|hxx|hh|inl"
+        CHECK_DIRS="include/ src/"
+
+        FOUND_INVALID=false
+
+        printf "%s\\n" "${{ steps.changed-files.outputs.changed_files_list }}" | while read -r FILE; do
+          if [ -z "$FILE" ]; then
+            continue
+          fi
+
+          IS_IN_CHECK_DIR=false
+          for DIR in $CHECK_DIRS; do
+            if [[ "$FILE" == "$DIR"* ]]; then
+              IS_IN_CHECK_DIR=true
+              break
+            fi
+          done
+
+          if [ "$IS_IN_CHECK_DIR" = false ]; then
+            continue
+           actuated if not in checked dir
+          fi
+
+          FILENAME=$(basename "$FILE")
+          if [[ "$FILENAME" == *.* && "${FILENAME%.*}" != "$FILENAME" ]]; then
+            EXTENSION="${FILENAME##*.}"
+            EXTENSION_LOWER=$(echo "$EXTENSION" | tr '[:upper:]' '[:lower:]')
+
+            if ! echo "$EXTENSION_LOWER" | grep -Eq "^($ALLOWED_EXTENSIONS_REGEX)$"; then
+              if echo "$EXTENSION_LOWER" | grep -Eq "^($DISALLOWED_CPP_EXTENSIONS_REGEX)$"; then
+                echo "::error file=$FILE::File '$FILE' in a C/C++ directory has the disallowed extension '.$EXTENSION'."
+                echo "Please rename it to use .c, .cc, or .h."
+                FOUND_INVALID=true
+              else
+                echo "::error file=$FILE::File '$FILE' in a C/C++ directory has an unexpected extension '.$EXTENSION'."
+                echo "Only .c, .cc, or .h extensions are allowed for source and header files here."
+                FOUND_INVALID=true
+              fi
+            fi
+          fi
+        done
+
+        if [ "$FOUND_INVALID" = true ]; then
+          echo "---"
+          echo "Error: One or more files violated C/C++ file naming conventions."
+          exit 1
+        fi
+        echo "All C/C++ file names conform to the naming conventions."

@@ -1,12 +1,14 @@
-name: Enforce C/C++ File Naming Conventions
+name: Enforce C/C++ File Naming Conventions (New/Renamed Files Only)
 
 on:
   push:
     branches:
       - main
+      - test
   pull_request:
     branches:
       - main
+      - test
 
 jobs:
   check_c_cpp_file_names:
@@ -15,7 +17,6 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
       with:
-        # fetch-depth: 0 is crucial to get full history for git diff to detect renames properly
         fetch-depth: 0
 
     - name: Get added and renamed files
@@ -38,11 +39,17 @@ jobs:
       # Only run if there are any added or renamed files
       if: steps.changed-files.outputs.changed_files_list != ''
       run: |
+        # Enable pipefail so that a non-zero exit from the `while read` loop
+        # (or any command in the pipeline) causes the entire step to fail.
+        set -o pipefail
+
         ALLOWED_EXTENSIONS_REGEX="c|cc|h"
         DISALLOWED_CPP_EXTENSIONS_REGEX="cpp|cxx|hpp|hxx|hh|inl"
         CHECK_DIRS="include/ src/"
 
-        FOUND_INVALID=false
+        # We no longer need the FOUND_INVALID boolean flag in the parent shell.
+        # Instead, we will directly exit 1 from within the loop if an error is found.
+        # This exit 1 will then propagate up due to 'pipefail'.
 
         printf "%s\\n" "${{ steps.changed-files.outputs.changed_files_list }}" | while read -r FILE; do
           if [ -z "$FILE" ]; then
@@ -59,7 +66,6 @@ jobs:
 
           if [ "$IS_IN_CHECK_DIR" = false ]; then
             continue
-           actuated if not in checked dir
           fi
 
           FILENAME=$(basename "$FILE")
@@ -71,19 +77,14 @@ jobs:
               if echo "$EXTENSION_LOWER" | grep -Eq "^($DISALLOWED_CPP_EXTENSIONS_REGEX)$"; then
                 echo "::error file=$FILE::File '$FILE' in a C/C++ directory has the disallowed extension '.$EXTENSION'."
                 echo "Please rename it to use .c, .cc, or .h."
-                FOUND_INVALID=true
+                exit 1 # <--- EXIT 1 HERE IF INVALID FILE IS FOUND
               else
                 echo "::error file=$FILE::File '$FILE' in a C/C++ directory has an unexpected extension '.$EXTENSION'."
                 echo "Only .c, .cc, or .h extensions are allowed for source and header files here."
-                FOUND_INVALID=true
+                exit 1 # <--- EXIT 1 HERE IF INVALID FILE IS FOUND
               fi
             fi
           fi
         done
-
-        if [ "$FOUND_INVALID" = true ]; then
-          echo "---"
-          echo "Error: One or more files violated C/C++ file naming conventions."
-          exit 1
-        fi
+        # If the loop completes without exiting, it means all files are valid.
         echo "All C/C++ file names conform to the naming conventions."

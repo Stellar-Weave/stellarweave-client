@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10) # Set the minimum required CMake version
 
-project(StellarWeave               # Name of your project
+project(StellarWeave-Client               # Name of your project
     VERSION 0.1.0                     # Initial version number
     LANGUAGES CXX C                   # Languages used in your project (e.g., CXX for C++, C for C)
 )

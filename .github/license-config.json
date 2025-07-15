@@ -1,0 +1,12 @@
+[
+  {
+    "include": [
+      "src/**/*.cc",
+      "src/**/*.h",
+      "include/**/*.h"
+    ],
+    "exclude": [
+    ],
+    "license": ".github/license-header.txt"
+  }
+]

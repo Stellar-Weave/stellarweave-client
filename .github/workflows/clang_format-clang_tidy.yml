@@ -34,7 +34,7 @@ jobs:
       - name: Setup C++ Build Environment
         # This action installs Clang, clang-format, clang-tidy, cmake, ninja, etc.
         # It's more robust than manual apt-get installs for C++ toolchains.
-        uses: "aminya/setup-cpp@v2"
+        uses: aminya/setup-cpp@v1.7.1
         with:
           compiler: clang
           clang-version: "18" # Or "latest", or a specific version to match your local setup

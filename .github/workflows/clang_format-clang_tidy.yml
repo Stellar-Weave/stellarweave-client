@@ -6,7 +6,7 @@ on:
   push:
     branches:
       - "main"
-      - "develop" # Include develop branch if you use it for active development
+      - "dev"
     paths:
       - 'src/**/*.cc'
       - 'src/**/*.h'
@@ -14,7 +14,7 @@ on:
   pull_request:
     branches:
       - "main"
-      - "develop" # Include develop branch
+      - "dev" 
     paths:
       - 'src/**/*.cc'
       - 'src/**/*.h'

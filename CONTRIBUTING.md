@@ -91,9 +91,6 @@ We will then take care of the issue as soon as possible.
 
 ## I Want To Contribute
 
-> ### Legal Notice 
-> When contributing to this project, you must agree that you have authored 100% of the content, that you have the necessary rights to the content and that the content you contribute may be provided under the project license.
-
 ### Reporting Bugs
 
 > You must never report security related issues, vulnerabilities or bugs including sensitive information to the issue tracker, or elsewhere in public. Check our [Security Policy](https://github.com/Stellar-Weave/stellarweave-client/security/policy) for information.
@@ -153,6 +150,9 @@ Enhancement suggestions are tracked as [GitHub issues](/issues).
 - **Explain why this enhancement would be useful** to most CONTRIBUTING.md users. You may also want to point out the other projects that solved it better and which could serve as inspiration.
 
 ### Making Your First Contribution
+
+> ### Legal Notice 
+> When contributing to this project, you must agree that you have authored 100% of the content, that you have the necessary rights to the content and that the content you contribute may be provided under the project license.
 
 #### File Headers and Copyright Notice
 

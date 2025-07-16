@@ -4,13 +4,13 @@ name: Check Source File Headers
 
 on:
   push:
-    branches: 
-    - "main"
-    - "test"
+    branches:
+      - "main"
+      - "dev"
   pull_request:
-    branches: 
-    - "main"
-    - "test"
+    branches:
+      - "main"
+      - "dev"
   workflow_dispatch:
 
 jobs:

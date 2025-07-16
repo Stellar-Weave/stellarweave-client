@@ -43,8 +43,8 @@ jobs:
         # (or any command in the pipeline) causes the entire step to fail.
         set -o pipefail
 
-        ALLOWED_EXTENSIONS_REGEX="c|cc|h"
-        DISALLOWED_CPP_EXTENSIONS_REGEX="cpp|cxx|hpp|hxx|hh|inl"
+        ALLOWED_EXTENSIONS_REGEX="c|cc|h|inc"
+        DISALLOWED_CPP_EXTENSIONS_REGEX="cpp|cxx|hpp|hxx|hh"
         CHECK_DIRS="include/ src/"
 
         # We no longer need the FOUND_INVALID boolean flag in the parent shell.

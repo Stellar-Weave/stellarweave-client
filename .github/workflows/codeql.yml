@@ -13,14 +13,18 @@ name: "CodeQL Advanced"
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - "main"
+      - "dev"
     paths:
       - 'stellarweave-client/src/**'
       - 'stellarweave-client/include/**'
       - 'stellarweave-client/shaders/**' # Shaders can have vulnerabilities or performance issues
       - 'stellarweave-client/CMakeLists.txt' # Changes to build configuration are also important
   pull_request:
-    branches: [ "main" ]
+    branches:
+      - "main"
+      - "dev"
     paths:
       - 'stellarweave-client/src/**'
       - 'stellarweave-client/include/**'

@@ -3,12 +3,12 @@ name: Enforce C/C++ File Naming Conventions (New/Renamed Files Only)
 on:
   push:
     branches:
-      - main
-      - test
+      - "main"
+      - "dev"
   pull_request:
     branches:
-      - main
-      - test
+      - "main"
+      - "dev"
 
 jobs:
   check_c_cpp_file_names:

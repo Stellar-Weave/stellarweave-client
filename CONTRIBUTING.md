@@ -51,22 +51,25 @@ And if you like the project, but just don't have time to contribute, that's fine
 
 ```
 stellarweave-client/
-├── ISSUE_TEMPLATE/
-├── assets/                 # Star textures, icons, fonts
-├── docs/
-├── include/                # Public include headers
-├── shaders/                # GLSL shaders
-├── src/
-│   ├── engine/             # Core engine classes (renderer, scene graph, etc.)
-│   ├── ui/                 # UI logic
-│   ├── input/              # Input handling (keyboard/mouse)
-│   └── utils/              # Math, logging, utility functions
-├── .gitignore
-├── CMakeLists.txt
-├── CODE_OF_CONDUCT.md
-├── CONTRIBUTING.md
-├── LICENSE
-├── README.md
+├── .github/              # GitHub-specific configuration (CI/CD workflows, issue templates)
+├── assets/               # Static assets (star textures, UI icons, fonts)
+├── docs/                 # Client-specific documentation
+├── include/              # Public include headers for the client's API
+├── shaders/              # GLSL shader files
+├── src/                  # Core source code, organized into modules
+│   ├── engine/           # Core engine classes (renderer, scene graph, etc.)
+│   ├── ui/               # UI logic and components
+│   ├── input/            # Input handling (keyboard/mouse)
+│   └── utils/            # Utility functions (math, logging)
+├── .clang-format         # ClangFormat configuration for code style
+├── .clang-tidy           # Clang-Tidy configuration for static analysis
+├── .gitignore            # Specifies intentionally untracked files for Git
+├── CMakeLists.txt        # Primary CMake build script
+├── CODE_OF_CONDUCT.md    # Guidelines for community behavior
+├── CONTRIBUTING.md       # Instructions for contributing to the project
+├── LICENSE               # Licensing terms for the software
+├── README.md             # Project overview, setup, and usage instructions
+└── SECURITY.md           # Guidelines for reporting security vulnerabilities
 ```
 ## Code of Conduct
 

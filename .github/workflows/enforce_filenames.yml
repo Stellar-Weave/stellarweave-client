@@ -1,4 +1,4 @@
-name: Enforce C/C++ File Naming Conventions (New/Renamed Files Only)
+name: Enforce C/C++ File Naming Conventions
 
 on:
   push:

@@ -1,0 +1,20 @@
+{
+  "version": 4,
+  "configurePresets": [
+    {
+      "name": "x64-Debug",
+      "displayName": "x64 Debug (Clang-CL)",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/out/build/${presetName}",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/${presetName}"
+      },
+      "vendor": {
+        "microsoft.com/VisualStudioSettings/CMake/1.0": {
+          "hostEnvironments": [ "clang_cl_x64" ]
+        }
+      }
+    }
+  ]
+}
